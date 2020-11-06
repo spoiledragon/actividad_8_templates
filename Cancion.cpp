@@ -66,6 +66,15 @@
         return 1;
     return 0;}
 
+        int Cancion::comparartista (const Cancion &c1, const Cancion &c2){
+    if (c1.artista < c2.artista)
+        return -1;
+    if (c1.artista == c2.artista)
+        return 0;
+    if (c1.artista > c2.artista)
+        return 1;
+    return 0;}
+
 
 
 

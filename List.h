@@ -20,6 +20,7 @@ public:
     //constructores
     Lista();
     Lista(const Lista<T, SIZE> &);
+    ~Lista();
 
     //comprobadores globales
     bool tavacio();
@@ -34,11 +35,12 @@ public:
     int getlastp();           //la ultima
     int getprev(const int &); //anterior
     int getnext(const int &); //la que sigue
+    std::string tostr();
 
     T recupera(const int &); //retrueve = recupera
-    std::string tostring();            //no confundir con to_string :(
-    void print();                      //tostring para noobs
-    void borrador4k();                 //podemos borrar aca bien piola o regresar a la primera posicion depende del caso
+    std::string tostring();  //no confundir con to_string :(
+    void print();            //tostring para noobs
+    void borrador4k();       //podemos borrar aca bien piola o regresar a la primera posicion depende del caso
 
     void llenar();
 
@@ -125,7 +127,8 @@ void Lista<T, SIZE>::insertar(const T &cosa, const int &posi)
     //pointers[posi] = pointer;
     pointers[posi + 1] = pointer;
     cout << endl
-         << "se añadio:" << endl<< &pointers[posi];
+         << "se añadio:" << endl
+         << &pointers[posi]<<endl;
     //se aumenta el ultimo lugar
     ultlugar++;
     pointer = nullptr;
@@ -135,31 +138,6 @@ template <class T, int SIZE>
 void Lista<T, SIZE>::insertasiguiente(const T &cosa)
 {
     insertar(cosa, ultlugar);
-}
-
-template <class T, int SIZE>
-void Lista<T, SIZE>::print()
-{
-    T *temporal;
-    Cancion *pointer;
-    pointer = new Cancion;
-    pointer = NULL;
-    cout << endl
-         << "vamos a imprimir" << endl;
-    cout << left;
-    cout << setw(30) << "aqui estan todas las direcciones" << endl;
-    for (int i = 0; i < ultlugar + 1; i++)
-    {
-
-        temporal = pointers[i];
-        pointer = temporal;
-        cout << pointer->tostr() << endl;
-        free(pointer);
-        pointer = nullptr;
-        temporal = nullptr;
-    }
-    temporal = nullptr;
-    pointer = nullptr;
 }
 
 template <class T, int SIZE>
@@ -206,7 +184,7 @@ int Lista<T, SIZE>::getprev(const int &p)
         throw ListException("getElementAt() - Posición invalida");
     }
 
-    return p-1;
+    return p - 1;
 }
 
 template <class T, int SIZE>
@@ -214,10 +192,10 @@ int Lista<T, SIZE>::getnext(const int &p)
 {
     if (p == -1 or !valida(p))
     {
-       throw ListException("getElementAt() - Posición invalida");
+        throw ListException("getElementAt() - Posición invalida");
     }
 
-    return p+1;
+    return p + 1;
 }
 
 template <class T, int SIZE>
@@ -227,7 +205,7 @@ T Lista<T, SIZE>::recupera(const int &p)
     {
         throw ListException("getElementAt() - Posición invalida");
     }
-    return *pointers[p];
+    return *pointers[p-1];
 }
 
 template <class T, int SIZE>
@@ -294,6 +272,23 @@ string Lista<T, SIZE>::busquedabinaria(const string &b)
     return "no se encontro tu elemento";
 }
 
+
+template <class T, int SIZE>
+string Lista<T, SIZE>::tostr()
+{
+    Cancion x;
+    string exp = "";
+    for (size_t i = 0; i <= ultlugar; i++)
+    {   
+        x=*pointers[i];
+        exp += x.tostr();
+        exp += "\n ";
+        
+    }
+    
+    return exp;
+}
+
 //aqui van los de la actividad 6
 template <class T, int SIZE>
 void Lista<T, SIZE>::swapData(int A, int B)
@@ -348,7 +343,6 @@ void Lista<T, SIZE>::sortBubble(int comp(const T &t1, const T &t2))
         i--;
     } while (banderita);
 }
-
 
 template <class T, int SIZE>
 void Lista<T, SIZE>::sortDatainsert()
@@ -451,47 +445,56 @@ void Lista<T, SIZE>::sortDataSelect(int comp(const T &t1, const T &t2))
 template <class T, int SIZE>
 void Lista<T, SIZE>::sortShell()
 {
-    
-        float factor = (0.5);
-        int diferencial = ((ultlugar + 1) * factor), i, j;
-        while (diferencial > 0)
-        {
-            i = diferencial;
-            while (i <= ultlugar)
-            {
-                j = i;
-                while (j >= diferencial && *pointers[j - diferencial] > *pointers[j])
-                    {
-                        swapData(j - diferencial, j);
-                        j = j - diferencial;
-                    }
-                i++;
-            }
-            diferencial = (diferencial * factor);
-        }
-    }
 
+    float factor = (0.5);
+    int diferencial = ((ultlugar + 1) * factor), i, j;
+    while (diferencial > 0)
+    {
+        i = diferencial;
+        while (i <= ultlugar)
+        {
+            j = i;
+            while (j >= diferencial && *pointers[j - diferencial] > *pointers[j])
+            {
+                swapData(j - diferencial, j);
+                j = j - diferencial;
+            }
+            i++;
+        }
+        diferencial = (diferencial * factor);
+    }
+}
 
 template <class T, int SIZE>
 void Lista<T, SIZE>::sortShell(int comp(const T &t1, const T &t2))
 {
-    
-        float factor = (0.5);
-        int diferencial = ((ultlugar + 1) * factor), i, j;
-        while (diferencial > 0)
+
+    float factor = (0.5);
+    int diferencial = ((ultlugar + 1) * factor), i, j;
+    while (diferencial > 0)
+    {
+        i = diferencial;
+        while (i <= ultlugar)
         {
-            i = diferencial;
-            while (i <= ultlugar)
+            j = i;
+            while (j >= diferencial && comp(*pointers[j - diferencial], *pointers[j]) > 0)
             {
-                j = i;
-                while (j >= diferencial && comp (*pointers[j - diferencial] , *pointers[j])>0)
-                    {
-                        swapData(j - diferencial, j);
-                        j = j - diferencial;
-                    }
-                i++;
+                swapData(j - diferencial, j);
+                j = j - diferencial;
             }
-            diferencial = (diferencial * factor);
+            i++;
         }
+        diferencial = (diferencial * factor);
     }
+}
+
+template <class T, int SIZE>
+Lista<T, SIZE>::~Lista()
+{
+    for (size_t i = ultlugar; i > -1; i--)
+    {
+        delete [] pointers[i];
+    }
+    ultlugar = -1;
+}
 #endif // LIST_H_INCLUDED
