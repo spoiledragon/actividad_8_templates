@@ -277,7 +277,7 @@ template <class T, int SIZE>
 string Lista<T, SIZE>::tostr()
 {
     Cancion x;
-    string exp = "";
+    string exp;
     for (size_t i = 0; i <= ultlugar; i++)
     {   
         x=*pointers[i];
