@@ -11,6 +11,7 @@ using namespace std;
 class Menu
 {
 private:
+     //solo para poner las opciones y poderlas reutilizar si en algun momento las llego a ocupar de nuevo
      std::string string1;
      std::string string2;
      std::string string3;
@@ -28,7 +29,7 @@ public:
 
 //implementacion
 Menu::Menu()
-{
+{    //mi constructor siempre va a poner esto como opciones principales
      string1 = "Menu";
      string2 = "1) Insertar en la ultima posicion";
      string3 = "2) Mostrar Todas las canciones";
